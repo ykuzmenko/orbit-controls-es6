@@ -78,6 +78,10 @@ export default class OrbitControls extends EventDispatcher {
 
     // Set to false to disable panning
     this.enablePan = true;
+
+    // Set to true to enable one finger panning
+    this.oneFingerPan = false;
+
     this.keyPanSpeed = 7.0; // pixels moved per arrow key push
 
     // Set to true to automatically rotate around the target
@@ -806,6 +810,15 @@ export default class OrbitControls extends EventDispatcher {
 
         case 1: // one-fingered touch: rotate
 
+          if (scope.oneFingerPan == true && scope.enablePan == true) {
+
+            handleTouchStartPan(event);
+
+            state = STATE.TOUCH_PAN;
+
+            break;
+          }
+
           if (scope.enableRotate === false) return;
 
           handleTouchStartRotate(event);
@@ -858,6 +871,16 @@ export default class OrbitControls extends EventDispatcher {
       switch (event.touches.length) {
 
         case 1: // one-fingered touch: rotate
+
+          if (scope.oneFingerPan == true && scope.enablePan == true) {
+            if (state !== STATE.TOUCH_PAN) return;
+
+            handleTouchMovePan(event);
+
+            state = STATE.TOUCH_PAN;
+
+            break;
+          }
 
           if (scope.enableRotate === false) return;
           if (state !== STATE.TOUCH_ROTATE) return; // is this needed?...
