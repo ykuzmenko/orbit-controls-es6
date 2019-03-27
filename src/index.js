@@ -690,6 +690,11 @@ export default class OrbitControls extends EventDispatcher {
 
     }
 
+
+    function checkMultiValue(config, event_code) {
+      return config != null && typeof(config) == "object" && config.includes(event_code);
+    }
+
     //
     // event handlers - FSM: listen for events and reset state
     //
@@ -700,7 +705,8 @@ export default class OrbitControls extends EventDispatcher {
 
       event.preventDefault();
 
-      if (event.button === scope.mouseButtons.ORBIT) {
+      if (event.button === scope.mouseButtons.ORBIT ||
+        checkMultiValue(scope.mouseButtons.ORBIT, event.button)) {
 
         if (scope.enableRotate === false) return;
 
@@ -708,7 +714,9 @@ export default class OrbitControls extends EventDispatcher {
 
         state = STATE.ROTATE;
 
-      } else if (event.button === scope.mouseButtons.ZOOM) {
+      } else if (event.button === scope.mouseButtons.ZOOM ||
+        checkMultiValue(scope.mouseButtons.ZOOM, event.button)
+        ) {
 
         if (scope.enableZoom === false) return;
 
@@ -716,7 +724,8 @@ export default class OrbitControls extends EventDispatcher {
 
         state = STATE.DOLLY;
 
-      } else if (event.button === scope.mouseButtons.PAN) {
+      } else if (event.button === scope.mouseButtons.PAN ||
+        checkMultiValue(scope.mouseButtons.PAN, event.button)) {
 
         if (scope.enablePan === false) return;
 
